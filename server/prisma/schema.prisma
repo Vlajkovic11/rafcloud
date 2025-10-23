@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  fullName   String
+  email      String   @unique
+  password   String
+  permissions Permission[]
+  machines   Machine[]
+}
+
+model Permission {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[] 
+}
+
+model Machine {
+  id           Int      @id @default(autoincrement())
+  name         String
+  state        String   // "Free" | "Busy"
+  active       Boolean  @default(true)
+  createdById  Int
+  createdBy    User     @relation(fields: [createdById], references: [id])
+  errors       ErrorLog[]
+}
+
+model ErrorLog {
+  id        Int      @id @default(autoincrement())
+  message   String
+  machineId Int
+  machine   Machine  @relation(fields: [machineId], references: [id])
+  createdAt DateTime @default(now())
+}

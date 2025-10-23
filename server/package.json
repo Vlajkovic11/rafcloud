@@ -1,8 +1,7 @@
 {
-  "name": "raf-event-booker",
+  "name": "server",
   "version": "1.0.0",
-  "main": "src/app.js",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
@@ -11,16 +10,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
     "@prisma/client": "^6.15.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "live-server": "^1.2.2",
     "prisma": "^6.15.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-  },
-  "description": ""
+  }
 }
