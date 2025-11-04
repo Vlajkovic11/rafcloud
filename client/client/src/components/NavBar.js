@@ -13,13 +13,12 @@ function Navbar({ user, setUser, refreshTrigger }) {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem("token");
-            await fetch("http://localhost:4000/api/all/logout", {
+            await fetch("http://localhost:4000/api/auth/logout", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ userId: user.id })
             });
             setUser(null);
             localStorage.removeItem("user");
