@@ -20,7 +20,13 @@ function Login({ setUser }) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
                     setUser(data.user);
-                    navigate("/");
+                    console.log(data.user.permissions);
+                    if (data.user.permissions.includes("read_user")) {
+                        navigate("/home");
+                    } else {
+                        alert("Nemate dozvolu za pregled korisnika.");
+                        // navigate("/home");
+                    }
                 } else {
                     alert("Pogrešan email ili lozinka");
                 }

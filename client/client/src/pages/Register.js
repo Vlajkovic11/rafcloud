@@ -16,7 +16,7 @@ function Register() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(`REGISTER: ${JSON.stringify(data)}`)
+                // console.log(`REGISTER: ${JSON.stringify(data)}`)
                 if (data.success) {
                     navigate("/login");
                 } else {

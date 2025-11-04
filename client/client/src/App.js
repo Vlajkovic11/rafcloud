@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
-import Search from "./pages/Search";
+// import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Users from "./pages/Users";
+// import Users from "./pages/Users";
 import CreateUsers from "./pages/CreateUser";
 import EditUsers from "./pages/EditUser";
+import Home from "./pages/Home";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -20,10 +21,11 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<Login setUser={setUser} />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/home" element={<Home />} />
+          {/* <Route path="/search" element={<Search />} /> */}
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/users" element={<Users />} />
+          {/* <Route path="/users" element={<Users />} /> */}
           <Route path="/users/create" element={<CreateUsers />} />
           <Route path="/users/edit/:id" element={<EditUsers />} />
         </Routes>

@@ -6,7 +6,13 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({
+            where: { email },
+            include: { permissions: true },
+        });
+
+        // console.log(`KORISNIK: ${JSON.stringify(user)}`);
+
         if (!user) {
             return res.status(400).json({ success: false, error: "Invalid credentials" });
         }
@@ -16,11 +22,6 @@ export const loginUser = async (req, res) => {
             return res.status(400).json({ success: false, error: "Invalid credentials" });
         }
 
-        // await prisma.user.update({
-        //     where: { id: user.id },
-        //     data: { status: true },
-        // });
-
         const token = generateToken(user);
         // console.log(`LOGIN: ${JSON.stringify(res)}`);
 
@@ -28,7 +29,12 @@ export const loginUser = async (req, res) => {
             success: true,
             message: "Login successful",
             token,
-            user: { id: user.id, fullName: user.fullName, email: user.email },
+            user: {
+                id: user.id,
+                fullName: user.fullName,
+                email: user.email,
+                permissions: user.permissions.map(p => p.name),
+            },
         });
     } catch (err) {
         console.error("Login error:", err);
@@ -40,6 +46,7 @@ export const registerUser = async (req, res) => {
     try {
         const { fullName, email, password } = req.body;
         const existingUser = await prisma.user.findUnique({ where: { email } });
+        // console.log(`PODACI SA FRONTA: ${JSON.stringify(fullName)} , ${JSON.stringify(email)} , ${JSON.stringify(password)}`);
         if (existingUser) {
             return res.status(400).json({ success: false, error: "Email already in use" });
         }
@@ -59,14 +66,7 @@ export const registerUser = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-    const { userId } = req.body;
     try {
-
-        await prisma.user.update({
-            where: { id: userId },
-            data: { status: false }
-        });
-
         res.json({
             success: true,
             message: "Logout successful"
