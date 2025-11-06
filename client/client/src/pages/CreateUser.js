@@ -75,7 +75,7 @@ function CreateUser() {
             const data = await res.json();
             if (res.ok) {
                 alert("User created successfully!");
-                navigate("/home");
+                navigate("/users");
             } else {
                 alert(data.error || "Error creating user");
             }

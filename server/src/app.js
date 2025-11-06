@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import permissionRoutes from "./routes/permissionRoutes.js";
+import machineRoutes from "./routes/machineRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/permissions", permissionRoutes);
+app.use("/api/machines", machineRoutes);
 
 app.get("/", (req, res) => {
     res.send("Back radi");

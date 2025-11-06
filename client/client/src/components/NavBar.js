@@ -1,14 +1,7 @@
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Navbar({ user, setUser, refreshTrigger }) {
-    const [query, setQuery] = useState("");
+function Navbar({ user, setUser }) {
     const navigate = useNavigate();
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        navigate(`/search?query=${encodeURIComponent(query)}`);
-    };
 
     const handleLogout = async () => {
         try {
@@ -40,23 +33,13 @@ function Navbar({ user, setUser, refreshTrigger }) {
             }}>
 
                 <div>
-                    <Link to="/">Login</Link> |{" "}
-                    {user?.role === "admin" && (
-                        <>
-                            {" | "}
-                            <Link to="/users">Users</Link>
-                        </>
+                    {user?.permissions?.includes("read_user") && (
+                        <Link to="/users" style={{ marginLeft: "1rem" }}>Users</Link>
+                    )}
+                    {user?.permissions?.includes("read_user") && (
+                        <Link to="/machines" style={{ marginLeft: "1rem" }}>Machines</Link>
                     )}
 
-                    <form onSubmit={handleSearch} style={{ display: "inline", marginLeft: "1rem" }}>
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                        />
-                        <button type="submit">Find</button>
-                    </form>
                 </div>
 
                 <div>
@@ -69,9 +52,9 @@ function Navbar({ user, setUser, refreshTrigger }) {
                         <Link to="/login"> Log in / Register</Link>
                     )}
                 </div>
-            </nav>
+            </nav >
 
-        </div>
+        </div >
     );
 }
 

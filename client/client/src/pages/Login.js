@@ -22,10 +22,9 @@ function Login({ setUser }) {
                     setUser(data.user);
                     console.log(data.user.permissions);
                     if (data.user.permissions.includes("read_user")) {
-                        navigate("/home");
+                        navigate("/users");
                     } else {
                         alert("Nemate dozvolu za pregled korisnika.");
-                        // navigate("/home");
                     }
                 } else {
                     alert("Pogrešan email ili lozinka");
