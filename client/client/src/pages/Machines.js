@@ -162,7 +162,12 @@ function Machines() {
                         {filtered.map((m) => (
                             <tr key={m.id}>
                                 <td>{m.id}</td>
-                                <td>{m.name}</td>
+                                <td
+                                    style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
+                                    onClick={() => navigate(`/machines/${m.id}`)}
+                                >
+                                    {m.name}
+                                </td>
                                 <td>{m.state}</td>
                                 <td>{m.active ? "Yes" : "No"}</td>
                                 <td>{m.createdBy?.fullName || "Unknown"}</td>

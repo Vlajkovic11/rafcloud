@@ -31,7 +31,7 @@ function CreateMachine() {
                 return;
             }
 
-            const data = await res.json();
+            // const data = await res.json();
             alert("Machine created successfully!");
             navigate("/machines");
 

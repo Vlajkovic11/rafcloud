@@ -8,6 +8,7 @@ import EditUsers from "./pages/EditUser";
 import Users from "./pages/Users";
 import Machines from "./pages/Machines";
 import CreateMachine from "./pages/CreateMachine";
+import MachineDetails from "./pages/MachineDetails";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/users/edit/:id" element={<EditUsers />} />
           <Route path="/machines" element={<Machines />} />
           <Route path="/machines/create" element={<CreateMachine />} />
+          <Route path="/machines/:id" element={<MachineDetails />} />
         </Routes>
       </div>
     </Router>
