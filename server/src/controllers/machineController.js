@@ -63,3 +63,114 @@ export const createMachine = async (req, res) => {
     }
 };
 
+export const getMachineById = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const machine = await prisma.machine.findUnique({
+            where: { id },
+            include: { createdBy: true, errors: true },
+        });
+
+        if (!machine) return res.status(404).json({ error: "Machine not found" });
+        res.json(machine);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch machine" });
+    }
+};
+
+
+// Turn On
+export const turnOn = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const newError = await prisma.errorLog.create({
+            data: {
+                message: "Error while turning on",
+                machineId: parseInt(id),
+            },
+        });
+
+        res.json({ message: "Error logged for turning on", error: newError });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to log error" });
+    }
+};
+
+// Turn Off
+export const turnOff = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const newError = await prisma.errorLog.create({
+            data: {
+                message: "Error while turning off",
+                machineId: parseInt(id),
+            },
+        });
+
+        res.json({ message: "Error logged for turning off", error: newError });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to log error" });
+    }
+};
+
+// Restart
+export const restart = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const newError = await prisma.errorLog.create({
+            data: {
+                message: "Error while restarting",
+                machineId: parseInt(id),
+            },
+        });
+
+        res.json({ message: "Error logged for restarting", error: newError });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to log error" });
+    }
+};
+
+// Create
+export const createError = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const newError = await prisma.errorLog.create({
+            data: {
+                message: "Error while creating",
+                machineId: parseInt(id),
+            },
+        });
+
+        res.json({ message: "Error logged for creating", error: newError });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to log error" });
+    }
+};
+
+// Destroy
+export const destroyError = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const newError = await prisma.errorLog.create({
+            data: {
+                message: "Error while destroying",
+                machineId: parseInt(id),
+            },
+        });
+
+        res.json({ message: "Error logged for destroying", error: newError });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to log error" });
+    }
+};
