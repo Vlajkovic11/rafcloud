@@ -11,7 +11,7 @@ export const getMachines = async (req, res) => {
                     machines = await prisma.machine.findMany({
                         include: {
                             createdBy: { select: { id: true, fullName: true, email: true } },
-                            // errors: true, // možeš testirati da li ovo pravi problem
+                            // errors: true, 
                         },
                     });
                 } catch (err) {
@@ -29,7 +29,7 @@ export const getMachines = async (req, res) => {
             }
         } catch (prismaErr) {
             console.error("Prisma error:", prismaErr);
-            machines = []; // fallback da server ne padne
+            machines = []; // fallback
         }
 
         res.json(machines);
@@ -41,8 +41,8 @@ export const getMachines = async (req, res) => {
 
 export const createMachine = async (req, res) => {
     try {
-        const { name } = req.body; // samo name
-        const userId = req.user.id; // iz tokena
+        const { name } = req.body;
+        const userId = req.user.id;
 
         if (!name) {
             return res.status(400).json({ error: "Name is required" });
@@ -51,7 +51,7 @@ export const createMachine = async (req, res) => {
         const newMachine = await prisma.machine.create({
             data: {
                 name,
-                state: "Free", // default state
+                state: "Off", // default state
                 createdById: userId,
             },
         });
@@ -79,11 +79,15 @@ export const getMachineById = async (req, res) => {
     }
 };
 
-
 // Turn On
 export const turnOn = async (req, res) => {
     try {
         const { id } = req.params;
+
+        const machine = await prisma.machine.update({
+            where: { id: parseInt(id) },
+            data: { state: "On" },
+        });
 
         const newError = await prisma.errorLog.create({
             data: {
@@ -92,10 +96,10 @@ export const turnOn = async (req, res) => {
             },
         });
 
-        res.json({ message: "Error logged for turning on", error: newError });
+        res.json({ message: "Machine turned on", machine, error: newError });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to log error" });
+        res.status(500).json({ error: "Failed to turn on machine" });
     }
 };
 
@@ -104,6 +108,11 @@ export const turnOff = async (req, res) => {
     try {
         const { id } = req.params;
 
+        const machine = await prisma.machine.update({
+            where: { id: parseInt(id) },
+            data: { state: "Off" },
+        });
+
         const newError = await prisma.errorLog.create({
             data: {
                 message: "Error while turning off",
@@ -111,10 +120,10 @@ export const turnOff = async (req, res) => {
             },
         });
 
-        res.json({ message: "Error logged for turning off", error: newError });
+        res.json({ message: "Machine turned off", machine, error: newError });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to log error" });
+        res.status(500).json({ error: "Failed to turn off machine" });
     }
 };
 
@@ -122,14 +131,12 @@ export const turnOff = async (req, res) => {
 export const restart = async (req, res) => {
     try {
         const { id } = req.params;
-
         const newError = await prisma.errorLog.create({
             data: {
                 message: "Error while restarting",
                 machineId: parseInt(id),
             },
         });
-
         res.json({ message: "Error logged for restarting", error: newError });
     } catch (err) {
         console.error(err);
@@ -137,29 +144,15 @@ export const restart = async (req, res) => {
     }
 };
 
-// Create
-export const createError = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const newError = await prisma.errorLog.create({
-            data: {
-                message: "Error while creating",
-                machineId: parseInt(id),
-            },
-        });
-
-        res.json({ message: "Error logged for creating", error: newError });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to log error" });
-    }
-};
-
 // Destroy
-export const destroyError = async (req, res) => {
+export const destroy = async (req, res) => {
     try {
         const { id } = req.params;
+
+        const machine = await prisma.machine.update({
+            where: { id: parseInt(id) },
+            data: { active: false },
+        });
 
         const newError = await prisma.errorLog.create({
             data: {
@@ -168,9 +161,9 @@ export const destroyError = async (req, res) => {
             },
         });
 
-        res.json({ message: "Error logged for destroying", error: newError });
+        res.json({ message: "Machine destroyed", machine, error: newError });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to log error" });
+        res.status(500).json({ error: "Failed to destroy machine" });
     }
 };

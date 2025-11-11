@@ -12,7 +12,6 @@ function EditUser() {
     const [allPermissions, setAllPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch user and all available permissions
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -89,7 +88,7 @@ function EditUser() {
             const data = await res.json();
             if (res.ok) {
                 alert("User updated successfully!");
-                navigate("/home");
+                navigate("/users");
             } else {
                 alert(data.error || "Error updating user");
             }
@@ -147,11 +146,33 @@ function EditUser() {
                 </div>
 
                 <div style={{ marginTop: "1rem" }}>
-                    <button type="submit">Save Changes</button>
+                    <button
+                        type="submit"
+                        style={{
+                            padding: "6px 12px",
+                            cursor: "pointer",
+                            background: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "4px",
+                            marginLeft: "8px"
+                        }}
+
+                    >
+                        Save Changes
+                    </button>
                     <button
                         type="button"
                         onClick={() => navigate("/users")}
-                        style={{ marginLeft: "1rem" }}
+                        style={{
+                            padding: "6px 12px",
+                            cursor: "pointer",
+                            background: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "4px",
+                            marginLeft: "8px"
+                        }}
                     >
                         Cancel
                     </button>

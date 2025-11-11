@@ -9,8 +9,15 @@ function Machines() {
 
     // Filter polja
     const [searchName, setSearchName] = useState("");
-    const [stateFilter, setStateFilter] = useState(""); // "Free" ili "Busy"
+    const [stateFilter, setStateFilter] = useState(""); // "Off" ili "On"
     const [activeFilter, setActiveFilter] = useState(null); // true / false / null
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const userPermissions = user.permissions || [];
+
+    const canCreate = userPermissions.includes("create_machine");
 
     useEffect(() => {
         fetchMachines();
@@ -39,8 +46,16 @@ function Machines() {
         }
     };
 
+    // const canSearch = userPermissions.includes("search_machine");
+
+
     const handleSearch = (e) => {
         e.preventDefault();
+
+        if (!userPermissions.includes("search_machine")) {
+            alert("You don't have permission to search machines!");
+            return;
+        }
 
         let result = [...machines];
 
@@ -58,6 +73,17 @@ function Machines() {
             result = result.filter((m) => m.active === activeFilter);
         }
 
+        if (startDate) {
+            const start = new Date(startDate);
+            result = result.filter((m) => new Date(m.createdAt) >= start);
+        }
+
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            result = result.filter((m) => new Date(m.createdAt) <= end);
+        }
+
         setFiltered(result);
     };
 
@@ -67,7 +93,7 @@ function Machines() {
         <div style={{ padding: "1rem" }}>
             <h2>Machines</h2>
 
-            {/* 🔍 FILTER FORMA */}
+            {/* FILTER FORM */}
             <form
                 onSubmit={handleSearch}
                 style={{
@@ -77,7 +103,7 @@ function Machines() {
                     gap: "1rem",
                 }}
             >
-                {/* Pretraga po imenu */}
+                {/* Search by name */}
                 <input
                     type="text"
                     placeholder="Search by name"
@@ -86,28 +112,28 @@ function Machines() {
                     style={{ padding: "6px", flex: "1" }}
                 />
 
-                {/* Checkbox Free / Busy */}
+                {/* Checkbox Off / On */}
                 <div>
                     <label style={{ marginRight: "10px" }}>
                         <input
                             type="checkbox"
-                            checked={stateFilter === "Free"}
+                            checked={stateFilter === "Off"}
                             onChange={() =>
-                                setStateFilter(stateFilter === "Free" ? "" : "Free")
+                                setStateFilter(stateFilter === "Off" ? "" : "Off")
                             }
                         />
-                        Free
+                        Off
                     </label>
 
                     <label>
                         <input
                             type="checkbox"
-                            checked={stateFilter === "Busy"}
+                            checked={stateFilter === "On"}
                             onChange={() =>
-                                setStateFilter(stateFilter === "Busy" ? "" : "Busy")
+                                setStateFilter(stateFilter === "On" ? "" : "On")
                             }
                         />
-                        Busy
+                        On
                     </label>
                 </div>
 
@@ -125,8 +151,29 @@ function Machines() {
                     </label>
                 </div>
 
+                <div>
+                    <label>
+                        Start Date:
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                    </label>
+
+                    <label style={{ marginLeft: "1rem" }}>
+                        End Date:
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                    </label>
+                </div>
+
                 <button
                     type="submit"
+                    // disabled={!canSearch}
                     style={{
                         padding: "6px 12px",
                         cursor: "pointer",
@@ -140,7 +187,7 @@ function Machines() {
                 </button>
             </form>
 
-            {/* TABELA */}
+            {/* TABLE */}
             {filtered.length === 0 ? (
                 <p>No machines available.</p>
             ) : (
@@ -178,7 +225,24 @@ function Machines() {
             )}
 
             <div style={{ marginTop: "1rem" }}>
-                <button onClick={() => navigate("/machines/create")}>
+                <button
+                    onClick={() => {
+                        if (!canCreate) {
+                            alert("You don't have permission to create machines!");
+                            return;
+                        }
+                        navigate("/machines/create");
+                    }}
+                    disabled={!canCreate}
+                    style={{
+                        padding: "6px 12px",
+                        cursor: canCreate ? "pointer" : "not-allowed",
+                        background: canCreate ? "#007bff" : "#ccc",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                    }}
+                >
                     Create Machine
                 </button>
             </div>

@@ -25,7 +25,7 @@ function CreateMachine() {
             });
 
             if (!res.ok) {
-                const text = await res.text(); // safer way ako nije JSON
+                const text = await res.text();
                 console.error("Server error:", text);
                 alert("Error creating machine");
                 return;
