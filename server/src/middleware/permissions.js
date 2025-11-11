@@ -24,7 +24,7 @@ export const checkPermission = (requiredPermission) => {
                 return res.status(403).json({ error: `Missing permission: ${requiredPermission}` });
             }
 
-            req.user = user; // ubacujemo korisnika u req za dalje korišćenje
+            req.user = user;
             next();
         } catch (err) {
             console.error(err);

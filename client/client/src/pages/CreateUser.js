@@ -13,7 +13,6 @@ function CreateUser() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Fetch all permissions for checkboxes
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
@@ -152,7 +151,20 @@ function CreateUser() {
                     </div>
                 </div>
 
-                <button type="submit" style={{ marginTop: "1rem" }}>Create User</button>
+                <button
+                    type="submit"
+                    style={{
+                        padding: "6px 12px",
+                        cursor: "pointer",
+                        background: "#007bff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        marginLeft: "8px"
+                    }}
+                >
+                    Create User
+                </button>
             </form>
         </div>
     );

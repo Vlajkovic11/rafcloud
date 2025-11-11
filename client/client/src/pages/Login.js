@@ -20,7 +20,7 @@ function Login({ setUser }) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
                     setUser(data.user);
-                    console.log(data.user.permissions);
+                    // console.log(data.user.permissions);
                     if (data.user.permissions.includes("read_user")) {
                         navigate("/users");
                     } else {
@@ -48,7 +48,20 @@ function Login({ setUser }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type="submit">Log in</button>
+                <button
+                    type="submit"
+                    style={{
+                        padding: "6px 12px",
+                        cursor: "pointer",
+                        background: "#007bff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        marginLeft: "8px"
+                    }}
+                >
+                    Log in
+                </button>
             </form>
             <p>You don't have account? <Link to="/register">Register now</Link></p>
         </div>

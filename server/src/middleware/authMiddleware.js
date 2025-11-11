@@ -4,6 +4,8 @@ export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
+    // console.log("Token:", token);
+
     if (!token) {
         return res.status(401).json({ error: "Access denied. No token provided." });
     }
@@ -13,6 +15,8 @@ export const authenticateToken = (req, res, next) => {
         return res.status(403).json({ error: "Invalid or expired token." });
     }
 
-    req.user = decoded; // korisnik se dalje koristi u kontrolerima
+    // console.log("Decoded token:", decoded);
+
+    req.user = decoded;
     next();
 };

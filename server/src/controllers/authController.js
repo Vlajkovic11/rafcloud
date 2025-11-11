@@ -75,3 +75,28 @@ export const logoutUser = async (req, res) => {
         res.status(500).json({ error: "Logout failed" });
     }
 };
+
+export const getMe = async (req, res) => {
+    try {
+        const userId = req.user.id; // id from token
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { permissions: true },
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            permissions: user.permissions.map(p => p.name),
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch user" });
+    }
+};

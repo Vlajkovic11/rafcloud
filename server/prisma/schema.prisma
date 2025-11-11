@@ -30,6 +30,7 @@ model Machine {
   createdById  Int
   createdBy    User     @relation(fields: [createdById], references: [id])
   errors       ErrorLog[]
+  createdAt    DateTime   @default(now())  // <-- novo polje
 }
 
 model ErrorLog {

@@ -69,8 +69,8 @@ export const updateUser = async (req, res) => {
                 fullName,
                 email,
                 permissions: {
-                    set: [], // resetujemo postojeće
-                    connect: permissions.map(pName => ({ name: pName })) // povezujemo nove permisije
+                    set: [],
+                    connect: permissions.map(pName => ({ name: pName }))
                 }
             },
             include: { permissions: true },
@@ -92,10 +92,8 @@ export const createUser = async (req, res) => {
     try {
         const { fullName, email, password, permissions } = req.body;
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Napravi korisnika i poveži permisije
         const newUser = await prisma.user.create({
             data: {
                 fullName,
