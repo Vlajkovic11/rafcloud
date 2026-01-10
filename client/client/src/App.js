@@ -9,6 +9,7 @@ import Users from "./pages/Users";
 import Machines from "./pages/Machines";
 import CreateMachine from "./pages/CreateMachine";
 import MachineDetails from "./pages/MachineDetails";
+import ScheduledErrors from "./pages/ScheduledErrors";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/machines" element={<Machines />} />
           <Route path="/machines/create" element={<CreateMachine />} />
           <Route path="/machines/:id" element={<MachineDetails />} />
+          <Route path="/errors/scheduled" element={<ScheduledErrors />} />
         </Routes>
       </div>
     </Router>

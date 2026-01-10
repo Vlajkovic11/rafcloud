@@ -7,23 +7,42 @@ function Register() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        fetch("http://localhost:4000/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fullName, email, password })
-        })
-            .then(res => res.json())
-            .then(data => {
-                // console.log(`REGISTER: ${JSON.stringify(data)}`)
-                if (data.success) {
-                    navigate("/login");
-                } else {
-                    alert("Registracija neuspešna");
-                }
+
+        try {
+            const res = await fetch("http://localhost:4000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fullName, email, password }),
+
             });
+
+            const text = await res.text();
+            let data = null;
+            try {
+                data = text ? JSON.parse(text) : null;
+            } catch (err) {
+                data = null;
+            }
+
+            if (!res.ok) {
+                console.log("REGISTER failed:", res.status, text);
+                alert(data?.error || `Registracija neuspešna (HTTP ${res.status})`);
+                return;
+            }
+
+            if (data?.success) {
+                navigate("/login");
+            } else {
+                alert(data?.error || "Registracija neuspešna");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Ne mogu da se povežem sa serverom");
+        }
     };
+
 
     return (
         <div>
